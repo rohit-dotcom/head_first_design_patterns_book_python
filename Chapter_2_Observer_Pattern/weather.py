@@ -68,7 +68,6 @@ class WeatherData(Subject):
 
 class CurrentDisplayObserver(Observer,Display):
     
-
     def __init__(self,subject:Subject,temp=None,press=None,humid=None):
         self.subject=subject
         self.temp=None
