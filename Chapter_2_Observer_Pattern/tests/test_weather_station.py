@@ -1,4 +1,4 @@
-from weather import Station,WeatherData,CurrentDisplayObserver,ForecastDisplayObserver
+from weather import Station,WeatherData,CurrentDisplayObserver,ForecastDisplayObserver,HeatIndexObserver
 import numpy as np
 import random
 
@@ -7,9 +7,9 @@ class NewStation(Station):
     def get_temperature(self):
         return np.random.randint(10,20)
     def get_pressure(self):
-            return np.random.randint(100,200)
+        return np.random.randint(100,200)
     def get_humidity(self):
-            return np.random.randint(80,90)
+        return np.random.randint(80,90)
     def get_forecast(self):
         first_parts=['Look out for','More of','Here Comes',]
         second_parts=['Cold','Rains','Heat']
@@ -76,3 +76,35 @@ def test_if_forecast_display_is_able_to_unsubscirbe():
     assert forecast_observer not in new_weather_data.observers
     new_weather_data.weathersChanged()
     assert forecast_observer.forecast!=new_weather_data.forecast
+
+
+def test_if_heatIndex_display_is_able_to_fetch_data_from_subject_upon_subscription():
+    new_station=NewStation()
+    new_weather_data=WeatherData(new_station)
+    head_index_observer=HeatIndexObserver(new_weather_data)
+
+    head_index_observer.subscribe()
+
+    new_weather_data.weathersChanged()
+
+    assert head_index_observer.heat_index is not None
+
+
+def test_if_heatIndex_display_is_able_to_unsubscribe():
+    new_station=NewStation()
+    new_weather_data=WeatherData(new_station)
+    head_index_observer=HeatIndexObserver(new_weather_data)
+
+    head_index_observer.subscribe()
+
+    new_weather_data.weathersChanged()
+
+    assert head_index_observer.heat_index is not None
+    previous_heat_index=head_index_observer.heat_index
+    head_index_observer.unsubscribe()
+    assert head_index_observer not in new_weather_data.observers
+
+    new_heat_index_observer=HeatIndexObserver(new_weather_data)
+    new_heat_index_observer.subscribe()
+    new_weather_data.weathersChanged()
+    assert head_index_observer.heat_index!=new_heat_index_observer.heat_index
