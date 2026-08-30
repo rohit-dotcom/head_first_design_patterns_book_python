@@ -7,9 +7,9 @@ class NewStation(Station):
     def get_temperature(self):
         return np.random.randint(10,20)
     def get_pressure(self):
-            return np.random.randint(100,200)
+        return np.random.randint(100,200)
     def get_humidity(self):
-            return np.random.randint(80,90)
+        return np.random.randint(80,90)
     def get_forecast(self):
         first_parts=['Look out for','More of','Here Comes',]
         second_parts=['Cold','Rains','Heat']
