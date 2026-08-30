@@ -41,6 +41,9 @@ class Station(ABC):
     @abstractmethod
     def get_humidity(self):
         pass
+    @abstractmethod
+    def get_forecast(self):
+        pass
 
 class WeatherData(Subject):
     
@@ -56,12 +59,13 @@ class WeatherData(Subject):
 
     def notify(self):
         for observer in self.observers:
-            observer.update(self.temp,self.press,self.humid)
+            observer.update()
 
     def weathersChanged(self):
         self.temp=self.station.get_temperature()
         self.press=self.station.get_pressure()
         self.humid=self.station.get_humidity()
+        self.forecast=self.station.get_forecast()
         self.notify()
 
 
@@ -74,10 +78,10 @@ class CurrentDisplayObserver(Observer,Display):
         self.press=None
         self.humid=None
 
-    def update(self,temp,press,humid):
-        self.temp=temp
-        self.press=press
-        self.humid=humid
+    def update(self,):
+        self.temp=self.subject.temp
+        self.press=self.subject.press
+        self.humid=self.subject.humid
 
     def subscribe(self):
         self.subject.addObserver(self)
@@ -87,4 +91,26 @@ class CurrentDisplayObserver(Observer,Display):
 
     def display(self):
         return f'temp is {self.temp}, press is {self.press}, humidity is {self.humid}'
+
+
+class ForecastDisplayObserver(Observer,Display):
+    
+    def __init__(self,subject:Subject,forecast=None):
+        self.subject=subject
+        self.forecast=None
+
+    def update(self):
+        self.forecast=self.subject.forecast
+
+    def subscribe(self):
+        self.subject.addObserver(self)
+
+    def unsubscribe(self):
+        self.subject.removeObserver(self)
+
+    def display(self):
+        return f'Forecast is {self.forecast}'
+
+
+
         
