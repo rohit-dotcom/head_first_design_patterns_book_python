@@ -49,19 +49,6 @@ class veggiePizza(Pizza):
     def box(self):
         return "Boxing veggie pizza"
 
-class simplePizzaFactory():
-    pizza:Pizza=None
-
-    def get_pizza(self,type):
-        if type=="cheese":
-            pizza= CheesePizza()
-            
-        if type=="pepperoni":
-            pizza= PepperoniPizza()
-                
-        if type=="veggie":
-            pizza= veggiePizza()
-        return pizza
 
 class NYCheesePizza(Pizza):
 
@@ -99,11 +86,62 @@ class NYveggiePizza(Pizza):
         return "Boxing NYveggie pizza"
 
 
+class ChicagoCheesePizza(Pizza):
 
-class NYPizzaFactory():
-    pizza:Pizza=None
+    def bake(self):
+        return "Baking cheese pizza!"
 
-    def get_pizza(self,type):
+    def cut(self):
+        return "Cutting in square pieces"
+
+    def box(self):
+        return "Boxing cheese pizza"
+    
+
+class ChicagoPepperoniPizza(Pizza):
+
+    def bake(self):
+        return "Baking pepperoni pizza!"
+
+    def cut(self):
+        return "Cutting in diagonal pieces"
+
+    def box(self):
+        return "Boxing pepperoni pizza"
+
+
+class ChicagoveggiePizza(Pizza):
+
+    def bake(self):
+        return "Baking veggie pizza!"
+
+    def cut(self):
+        return "Cutting in triangular pieces"
+
+    def box(self):
+        return "Boxing Chichago veggie pizza"
+
+class PizzaStore(ABC):
+
+    
+    def orderPizza(self,type)->Pizza:
+        pizza:Pizza
+
+        pizza=self.create_pizza(type)
+
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        return pizza
+
+    @abstractmethod
+    def create_pizza(self,type):
+        pass
+
+class NYPizzaStore(PizzaStore):
+
+
+    def create_pizza(self,type):
         if type=="cheese":
             pizza= NYCheesePizza()
             
@@ -111,20 +149,19 @@ class NYPizzaFactory():
             pizza= NYPepperoniPizza()
                 
         if type=="veggie":
-            pizza= NYveggiePizza()
+            pizza=NYveggiePizza()
         return pizza
 
-class PizzaStore():
-    def __init__(self,factory:simplePizzaFactory):
-        self.factory=factory
-    
-    def orderPizza(self,type)->Pizza:
-        pizza:Pizza
+class ChicagoPizzaStore(PizzaStore):
 
-        pizza=self.factory.get_pizza(type)
 
-        pizza.bake()
-        pizza.cut()
-        pizza.box()
+    def create_pizza(self,type):
+        if type=="cheese":
+            pizza= ChicagoCheesePizza()
+            
+        if type=="pepperoni":
+            pizza= ChicagoPepperoniPizza()
+                
+        if type=="veggie":
+            pizza=ChicagoveggiePizza()
         return pizza
-
