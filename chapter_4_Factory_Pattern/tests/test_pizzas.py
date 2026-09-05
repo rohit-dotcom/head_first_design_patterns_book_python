@@ -1,4 +1,4 @@
-from pizzas import Pizza,PepperoniPizza,CheesePizza,veggiePizza,simplePizzaFactory,PizzaStore
+from pizzas import Pizza,PepperoniPizza,CheesePizza,veggiePizza,simplePizzaFactory,PizzaStore,NYPizzaFactory
 
 def test_able_to_create_instances_of_differen_pizzas():
 
@@ -15,6 +15,12 @@ def test_order_pizza_is_able_return_pizza():
     pizza_store=PizzaStore(factory)
     pizza=pizza_store.orderPizza('veggie')
     assert pizza.box()=='Boxing veggie pizza'
+
+def test_order_pizza_is_able_return_NYpizza():
+    factory=NYPizzaFactory()
+    pizza_store=PizzaStore(factory)
+    pizza=pizza_store.orderPizza('veggie')
+    assert pizza.box()=='Boxing NYveggie pizza'
 
 
 
