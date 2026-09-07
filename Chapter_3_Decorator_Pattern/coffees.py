@@ -1,7 +1,7 @@
 from abc import ABC,abstractmethod
 
 class Beverage(ABC):
-    description:str="unknow beverage"
+    description:str="unknown beverage"
 
     def get_description(self):
         return Beverage.description
