@@ -1,6 +1,7 @@
+from abc import ABC,abstractmethod
 
 class Dough(ABC):
-    pass
+    name:str
 
 class Sauce(ABC):
     pass
@@ -14,11 +15,11 @@ class Veggies(ABC):
     pass
 
 class Thin_Crust_Dough(Dough):
-    pass
+    name:str='Thin crust dough'
 class Very_Thin_Crust_Dough(Dough):
-    pass
+    name:str='Very thin crust dough'
 class Thick_Crust_Dough(Dough):
-    pass
+    name:str='Thick crust dough'
 
 class MozerellaCheese(Cheese):
     pass
@@ -28,7 +29,7 @@ class ReggianoCheese(Cheese):
 class GoatCheese(Cheese):
     pass
 
-class MarinaraSauce(Sause):
+class MarinaraSauce(Sauce):
     pass
 class TomatoPlumSauce(Sauce):
     pass
@@ -63,7 +64,7 @@ class ingredientsFactory(ABC):
         pass
 
     @abstractmethod
-    def create_sauce(self)->Souce:
+    def create_sauce(self)->Sauce:
         pass
 
     @abstractmethod
@@ -124,3 +125,108 @@ class Chicago_ingredients_factory(ingredientsFactory):
         return veggies  
     
 
+class Pizza(ABC):
+    name:str
+    dough:str
+    sauce:str
+    cheese:str
+    def __init__(self):
+        self.toppings=set()
+
+    @abstractmethod
+    def prepare(self):
+       pass
+
+    def bake(self):
+        print( "Baking for 25 minutes at 350 degrees")
+
+    def cut(self):
+        print("Cutting diagonal pieces")
+
+    
+    def box(self):
+        print("Boxing in the official pizzastore box")
+
+    def getName(self):
+        return self.name
+
+    def setName(self,name:str):
+        self.name=name
+
+class CheesePizza(Pizza):
+    def __init__(self,ingredient_factory:ingredientsFactory):
+        self.ingredient_factory=ingredient_factory
+
+    def prepare(self):
+        self.dough=self.ingredient_factory.create_dough()
+        self.sauce=self.ingredient_factory.create_dough()
+        self.cheese=self.ingredient_factory.create_cheese()
+
+class PepperoniPizza(Pizza):
+    def __init__(self,ingredient_factory:ingredientsFactory):
+        self.ingredient_factory=ingredient_factory
+
+    def prepare(self):
+        self.dough=self.ingredient_factory.create_dough()
+        self.sauce=self.ingredient_factory.create_dough()
+        self.cheese=self.ingredient_factory.create_cheese()
+
+class VeggiePizza(Pizza):
+    def __init__(self,ingredient_factory:ingredientsFactory):
+        self.ingredient_factory=ingredient_factory
+
+    def prepare(self):
+        self.dough=self.ingredient_factory.create_dough()
+        self.sauce=self.ingredient_factory.create_dough()
+        self.cheese=self.ingredient_factory.create_cheese()
+
+
+
+class PizzaStore(ABC):
+
+
+    def orderPizza(self,type)->Pizza:
+        pizza:Pizza
+
+        pizza=self.create_pizza(type)
+        pizza.prepare()
+        pizza.bake()
+        pizza.cut()
+        pizza.box()
+        return pizza
+
+    @abstractmethod
+    def create_pizza(self,type):
+        pass
+
+class NYPizzaStore(PizzaStore):
+
+
+    def create_pizza(self,type):
+        pizza:Pizza=None
+        ingredient_factory=NY_ingredients_factory()
+        if type=="cheese":
+            pizza= CheesePizza(ingredient_factory)
+            
+        if type=="pepperoni":
+            pizza= PepperoniPizza(ingredient_factory)
+                
+        if type=="veggie":
+            pizza=VeggiePizza(ingredient_factory)
+        return pizza
+
+class ChicagoPizzaStore(PizzaStore):
+
+
+    def create_pizza(self,type):
+        pizza:Pizza=None
+        ingredient_factory=Chicago_ingredients_factory()
+        if type=="cheese":
+            pizza= CheesePizza(ingredient_factory)
+            
+        if type=="pepperoni":
+            pizza= PepperoniPizza(ingredient_factory)
+                
+        if type=="veggie":
+            pizza=VeggiePizza(ingredient_factory)
+        return pizza
