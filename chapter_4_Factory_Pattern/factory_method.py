@@ -44,38 +44,23 @@ class NYCheesePizza(Pizza):
         self.sauce='Marinara Sauce'
         self.toppings.add('Grated Reggiano Cheese')
 
-# class NYPepperoniPizza(Pizza):
-#     def __init__(self,ingredients_factory:ingredientsFactory):
-#         self.ingredient_factory=self.ingredient_factory
-            
-        
-        
-#     def create_ingredients(self):
-#         print(f"Preparing + {name}")
-#         dough=self.ingredient_factory.create_dough()
-#         sauce=self.ingredient_factory.create_sauce()
-#         dheese=self.ingredient_factory.create_cheese()
-
-#     def bake(self):
-#         print("Baking pepperoni pizza!")
-
-#     def cut(self):
-#         print("Cutting in diagonal pieces")
-
-#     def box(self):
-#         print("Boxing pepperoni pizza")
+class NYPepperoniPizza(Pizza):
+    def __init__(self):
+        super().__init__()
+        self.name='NY style sauce and Pepperoni pizza'
+        self.dough='Thin crust dough'
+        self.sauce='Marinara Sauce'
+        self.toppings.add('Grated Reggiano Cheese')
 
 
-# class NYveggiePizza(Pizza):
+class NYveggiePizza(Pizza):
 
-#     def bake(self):
-#         print("Baking veggie pizza!")
-
-#     def cut(self):
-#         print("Cutting in triangular pieces")
-
-#     def box(self):
-#         print("Boxing NYveggie pizza")
+    def __init__(self):
+        super().__init__()
+        self.name='NY style sauce and Veggie pizza'
+        self.dough='Thin crust dough'
+        self.sauce='Marinara Sauce'
+        self.toppings.add('Grated Reggiano Cheese')
 
 
 class ChicagoCheesePizza(Pizza):
@@ -89,13 +74,13 @@ class ChicagoCheesePizza(Pizza):
 
     
 
-# class ChicagoPepperoniPizza(Pizza):
-#     pass
+class ChicagoPepperoniPizza(Pizza):
+    pass
 
 
 
-# class ChicagoveggiePizza(Pizza):
-#     pass
+class ChicagoveggiePizza(Pizza):
+    pass
 
 
 
@@ -123,11 +108,11 @@ class NYPizzaStore(PizzaStore):
         if type=="cheese":
             pizza= NYCheesePizza()
             
-        # if type=="pepperoni":
-        #     pizza= NYPepperoniPizza()
+        if type=="pepperoni":
+            pizza= NYPepperoniPizza()
                 
-        # if type=="veggie":
-        #     pizza=NYveggiePizza()
+        if type=="veggie":
+            pizza=NYveggiePizza()
         return pizza
 
 class ChicagoPizzaStore(PizzaStore):
@@ -137,9 +122,9 @@ class ChicagoPizzaStore(PizzaStore):
         if type=="cheese":
             pizza= ChicagoCheesePizza()
             
-        # if type=="pepperoni":
-        #     pizza= ChicagoPepperoniPizza()
+        if type=="pepperoni":
+            pizza= ChicagoPepperoniPizza()
                 
-        # if type=="veggie":
-        #     pizza=ChicagoveggiePizza()
+        if type=="veggie":
+            pizza=ChicagoveggiePizza()
         return pizza
