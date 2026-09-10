@@ -12,7 +12,10 @@ if __name__=="__main__":
     remote.set_command(1,celling_fan_off_command,celling_fan_high_command)
     print(remote.onButtonWasPressed(0))
     print(remote.offButtonWasPressed(0))
+    print('_'*5+'trying undo command'+'_'*5)
+    print(remote.undoButtonWasPressed())
     print(remote.onButtonWasPressed(1))
     print(remote.offButtonWasPressed(1))
+    
 
     print(remote)
