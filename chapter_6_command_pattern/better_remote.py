@@ -31,7 +31,11 @@ class CellingFan():
 
 class commandInterface(ABC):
 
+    @abstractmethod
     def execute(self):
+        pass
+    @abstractmethod
+    def undo(self):
         pass
 
 
@@ -43,6 +47,9 @@ class LightsOnCommand(commandInterface):
     def execute(self):
         return self.light.on()
 
+    def undo(self):
+        return self.light.off()
+
 class LightsOFFCommand(commandInterface):
 
     def __init__(self,light:Light):
@@ -50,6 +57,10 @@ class LightsOFFCommand(commandInterface):
 
     def execute(self):
         return self.light.off()
+    
+    def undo(self):
+        return self.light.on()
+    
 
 class CellingFanHighCommand(commandInterface):
 
@@ -58,6 +69,10 @@ class CellingFanHighCommand(commandInterface):
 
     def execute(self):
         return self.fan.high()
+    def undo(self):
+        pass
+    
+
 
 class CellingFanOffCommand(commandInterface):
 
@@ -66,28 +81,38 @@ class CellingFanOffCommand(commandInterface):
 
     def execute(self):
         return self.fan.off()
+    def undo(self):
+            pass
 
 class RemoteControl():
 
     def __init__(self):
         self.onCommands=[None]*7
         self.offCommands=[None]*7
+        self.undoCommand=None
 
 
     def set_command(self,slot,offcommand:commandInterface,onCommand:commandInterface):
         self.onCommands[slot]=onCommand
         self.offCommands[slot]=offcommand
 
+
     def onButtonWasPressed(self,slot):
+        self.undoCommand=self.onCommands[slot]
         return self.onCommands[slot].execute()
 
     def offButtonWasPressed(self,slot):
+        self.undoCommand=self.offCommands[slot]
         return self.offCommands[slot].execute()
+
+    def undoButtonWasPressed(self):
+        return self.undoCommand.undo()
 
     def __repr__(self):
         remote_string='The remote has following slots and commands\n'
         for i in range(len(self.onCommands)):
             remote_string+=f'slot:{i} onCommand:{self.onCommands[i].__class__.__name__}  offCommands:{self.offCommands[i].__class__.__name__}\n'
+        remote_string+=f'undo: UndoCommand\n'
         remote_string+='-'*50
         return remote_string
 
