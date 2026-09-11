@@ -23,11 +23,31 @@ class LivingRoomLight(Light):
 
 class CellingFan():
 
-    def high(self):
-        return "This celling fan is on"
+    HIGH=3
+    MEDIUM=2
+    LOW=1
+    OFF=0
+    speed=None
 
+    def __init__(self,location:str):
+        self.location=location
+        CellingFan.speed=CellingFan.OFF
+        
+    def high(self):
+        CellingFan.speed=CellingFan.HIGH
+        return "This celling fan is high"
+    def medium(self):
+        CellingFan.speed=CellingFan.MEDIUM
+        return "This celling fan is medium"
+    def low(self):
+        CellingFan.speed=CellingFan.LOW
+        return "This celling fan is low"
     def off(self):
+        CellingFan.speed=CellingFan.OFF
         return "This celling fan is off"
+    def get_speed(self)->int:
+        return CellingFan.speed
+    
 
 class commandInterface(ABC):
 
@@ -63,27 +83,82 @@ class LightsOFFCommand(commandInterface):
     
 
 class CellingFanHighCommand(commandInterface):
+    prev_speed=None
 
     def __init__(self,fan:CellingFan):
         self.fan=fan
 
     def execute(self):
+        CellingFanHighCommand.prev_speed=self.fan.get_speed()    
         return self.fan.high()
     def undo(self):
-        pass
-    
+        if CellingFanHighCommand.prev_speed==CellingFan.HIGH:
+            return self.fan.high()
+        if CellingFanHighCommand.prev_speed==CellingFan.MEDIUM:
+            return self.fan.medium()
+        if CellingFanHighCommand.prev_speed==CellingFan.LOW:
+            return self.fan.low()
+        if CellingFanHighCommand.prev_speed==CellingFan.OFF:
+            return self.fan.off()
 
-
-class CellingFanOffCommand(commandInterface):
+class CellingFanMediumCommand(commandInterface):
+    prev_speed=None
 
     def __init__(self,fan:CellingFan):
         self.fan=fan
 
     def execute(self):
+        CellingFanHighCommand.prev_speed=self.fan.get_speed()    
+        return self.fan.medium()
+    def undo(self):
+        if CellingFanHighCommand.prev_speed==CellingFan.HIGH:
+            return self.fan.high()
+        if CellingFanHighCommand.prev_speed==CellingFan.MEDIUM:
+            return self.fan.medium()
+        if CellingFanHighCommand.prev_speed==CellingFan.LOW:
+            return self.fan.low()
+        if CellingFanHighCommand.prev_speed==CellingFan.OFF:
+            return self.fan.off()
+
+class CellingFanLowCommand(commandInterface):
+    prev_speed=None
+
+    def __init__(self,fan:CellingFan):
+        self.fan=fan
+
+    def execute(self):
+        CellingFanHighCommand.prev_speed=self.fan.get_speed()    
+        return self.fan.low()
+    def undo(self):
+        if CellingFanHighCommand.prev_speed==CellingFan.HIGH:
+            return self.fan.high()
+        if CellingFanHighCommand.prev_speed==CellingFan.MEDIUM:
+            return self.fan.medium()
+        if CellingFanHighCommand.prev_speed==CellingFan.LOW:
+            return self.fan.low()
+        if CellingFanHighCommand.prev_speed==CellingFan.OFF:
+            return self.fan.off()
+   
+
+class CellingFanOffCommand(commandInterface):
+    prev_speed=None
+
+    def __init__(self,fan:CellingFan):
+        self.fan=fan
+
+    def execute(self):
+        CellingFanHighCommand.prev_speed=self.fan.get_speed()    
         return self.fan.off()
     def undo(self):
-            pass
-
+        if CellingFanHighCommand.prev_speed==CellingFan.HIGH:
+            return self.fan.high()
+        if CellingFanHighCommand.prev_speed==CellingFan.MEDIUM:
+            return self.fan.medium()
+        if CellingFanHighCommand.prev_speed==CellingFan.LOW:
+            return self.fan.low()
+        if CellingFanHighCommand.prev_speed==CellingFan.OFF:
+            return self.fan.off()
+   
 class RemoteControl():
 
     def __init__(self):
