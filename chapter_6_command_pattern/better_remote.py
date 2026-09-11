@@ -1,11 +1,23 @@
 from abc import ABC,abstractmethod
-import numpy as np
+from typing import List
+
+
+class commandInterface(ABC):
+
+    @abstractmethod
+    def execute(self):
+        pass
+    @abstractmethod
+    def undo(self):
+        pass
 
 class Light(ABC):
     def on():
         pass
     def off():
         pass
+    def dim(self):
+        return "this light is dim"
 
 class KitchenLight(Light):
 
@@ -47,16 +59,47 @@ class CellingFan():
         return "This celling fan is off"
     def get_speed(self)->int:
         return CellingFan.speed
-    
 
-class commandInterface(ABC):
+class Stereo():
+    def __init__(self,name:str):
+        self.name=name
 
-    @abstractmethod
-    def execute(self):
-        pass
-    @abstractmethod
-    def undo(self):
-        pass
+    def on(self):
+        return "This Stereo is on"
+
+    def off(self):
+        return "This stereo is off"
+
+    def setCD(self):
+        return "This stereo is set to cd"
+
+    def setRadio(self):
+        return "This stereo is set to Radio"
+
+    def setDVD(self):
+        return "This stereo is set to DVD"
+    def setVolumn(self):
+        return "this is set Volumne for stereo"
+
+class Hottub():
+    def __init__(self,name:str):
+        self.name=name
+
+    def on(self):
+        return "this hottub is on"
+
+    def off(self):
+        return "this hottub is off"
+
+class  TV():
+    def __init__(self,name:str):
+        self.name=name
+
+    def on(self):
+        return "This TV is ON"
+
+    def off(self):
+        return "This tv is off"
 
 
 class LightsOnCommand(commandInterface):
@@ -158,6 +201,78 @@ class CellingFanOffCommand(commandInterface):
             return self.fan.low()
         if CellingFanHighCommand.prev_speed==CellingFan.OFF:
             return self.fan.off()
+
+class tvOnCommand(commandInterface):
+    def __init__(self,tv:TV):
+        self.tv=tv
+
+    def execute(self):
+        return self.tv.on()
+    def undo(self):
+        return self.tv.off()
+class tvOffCommand(commandInterface):
+    def __init__(self,tv:TV):
+        self.tv=tv
+
+    def execute(self):
+        return self.tv.off()
+    def undo(self):
+        return self.tv.on()
+
+class hottubOnCommand(commandInterface):
+    def __init__(self,hottub:Hottub):
+        self.hottub=hottub
+
+    def execute(self):
+        return self.hottub.on()
+    def undo(self):
+        return self.hottub.off()
+class hottubOffCommand(commandInterface):
+    def __init__(self,hottub:Hottub):
+        self.hottub=hottub
+
+    def execute(self):
+        return self.hottub.off()
+    def undo(self):
+        return self.hottub.on()
+
+
+class stereoOnCommand(commandInterface):
+    def __init__(self,stereo:Stereo):
+        self.stereo=stereo
+
+    def execute(self):
+        return self.stereo.on()
+    def undo(self):
+        return self.stereo.off()
+class stereoOffCommand(commandInterface):
+    def __init__(self,stereo:Stereo):
+        self.stereo=stereo
+
+    def execute(self):
+        return self.stereo.off()
+    def undo(self):
+        return self.stereo.on()
+
+class Macros(commandInterface):
+
+    def __init__(self,commands:List[commandInterface]):
+         self.commands=commands
+
+    def execute(self):
+        output_str=''
+        for command in self.commands:
+            output_str+=f'{command.execute()}\n'
+        return output_str
+
+    def undo(self):
+        output_str=''
+        for command in self.commands:
+            output_str+=f'{command.undo()}\n'
+        return output_str
+    
+
+    
    
 class RemoteControl():
 
