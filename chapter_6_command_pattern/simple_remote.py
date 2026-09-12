@@ -10,6 +10,19 @@ class Light():
     def on(self,):
         return "This light is on!"
 
+class GarageDoor():
+
+    def open(self,):
+        return "This Garage Door is opened!"
+
+class GaragerDoorOpenCommand(commantInterface):
+
+    def __init__(self,garageDoor:GarageDoor):
+        self.garage_door=garageDoor
+
+    def execute(self):
+        return self.garage_door.open()
+
 
 class LightOnCommand(commantInterface):
     def __init__(self,light:Light):
