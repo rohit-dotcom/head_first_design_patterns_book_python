@@ -20,7 +20,11 @@ class CafinatedBeverage(ABC):
         self.boil_hot_water()
         self.brew()
         self.pour_in_cup()
-        self.add_condiments()
+        if self.customerWantsCondiments():
+            self.add_condiments()
+
+    def customerWantsCondiments(self):
+        return False
 
 class Coffee(CafinatedBeverage):
     def brew(self):
@@ -29,6 +33,16 @@ class Coffee(CafinatedBeverage):
     def add_condiments(self):
         print("Adding milk and sugar")
 
+    def customerWantsCondiments(self):
+        user_input=self.getUserInput()
+        if str.lower(user_input)=='y':
+            return True
+        else:
+            return False
+    def getUserInput(self):
+        userInput=input("Do you wand to add milk and sugar?(y/n)")
+        return userInput
+    
 
 class Tea(CafinatedBeverage):
     def brew(self):
