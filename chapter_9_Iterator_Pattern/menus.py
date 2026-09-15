@@ -23,7 +23,7 @@ class menuItem():
         return self.price
 
 class PancakeHouseMenu():
-    def __init__(self,menuItems:set=None):
+    def __init__(self,menuItems:set=set()):
         self.menuItems=menuItems
         self.addItem('K&B Pancake Breakfast','Pancakes with scrambled Eggs and toast',
                            False,2.99)
@@ -45,7 +45,7 @@ class PancakeHouseMenu():
 
 class DinerMenu():
     def __init__(self,menuItem:List=None):
-        self.max_item=6
+        self.max_items=6
         self.menuItems=[None]*self.max_items
         self.numberOfItems=0
 
@@ -60,7 +60,7 @@ class DinerMenu():
 
     def addItem(self,name:str,description:str,isVeg:bool,price:float):
         menu_item=menuItem(name,description,isVeg,price)
-        if self.numberOfItems>=self.max_item:
+        if self.numberOfItems>=self.max_items:
             raise MenuIsFull("Sorry Menu Is Full , Cant add any more items")
         else:
             self.menuItems[self.numberOfItems]=menu_item
