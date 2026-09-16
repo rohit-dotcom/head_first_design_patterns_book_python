@@ -8,4 +8,4 @@ if __name__=="__main__":
 
     waitress=Waitress(diner_menu,panckae_menu)
 
-    waitress.printMenu()
+    waitress.printAllMenu()

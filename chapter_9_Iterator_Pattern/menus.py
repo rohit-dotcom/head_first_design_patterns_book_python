@@ -1,8 +1,22 @@
+from __future__ import annotations
 from typing import List
+from abc import ABC,abstractmethod
+
 
 class MenuIsFull(Exception):
     pass
 
+class EndOfIteration(Exception):
+    pass
+
+class Iterator(ABC):
+    def hasNext()->bool:
+        pass
+    def next()->bool:
+        pass
+
+
+    
 class menuItem():
     def __init__(self,name:str,description:str,isVeg:bool,price:float):
         self.name=name
@@ -33,8 +47,6 @@ class PancakeHouseMenu():
                                    True,3.49)
         self.addItem('Waffles','Waffles with your choice of blueberries or strawberries',
                                    True,3.59)
-        
-    
 
     def addItem(self,name:str,description:str,isVeg:bool,price:float):
         menu_item=menuItem(name,description,isVeg,price)
@@ -42,6 +54,28 @@ class PancakeHouseMenu():
 
     def getMenuItems(self):
         return self.menuItems
+
+    def createIterator(self):
+        items=self.getMenuItems()
+        return PancakeHouseIterator(items)
+
+class PancakeHouseIterator(Iterator):
+    def __init__(self,pancake_menu_items):
+        self.position=0
+        self.menu_items=[i for i in pancake_menu_items]
+
+    def hasNext(self):
+        if self.position<len(self.menu_items) and self.menu_items[self.position] :
+            return True
+        else:
+            return False
+    def next(self):
+        if self.hasNext():
+            item=self.menu_items[self.position]
+            self.position+=1
+            return item
+        else:
+            raise EndOfIteration("Reach End of Iterations")
 
 class DinerMenu():
     def __init__(self,menuItem:List=None):
@@ -68,5 +102,31 @@ class DinerMenu():
 
     def getMenuItems(self):
         return self.menuItems
+
+    def createIterator(self):
+        items=self.getMenuItems()
+        return DinerIterator(items)
+
+class DinerIterator(Iterator):
+    def __init__(self,diner_menu_items):
+        self.position=0
+        self.menu_items=diner_menu_items
+
+    def hasNext(self):
+        if self.menu_items[self.position]:
+            
+            return True
+        else:
+            return False
+    def next(self):
+        if (self.hasNext()) and (self.menu_items[self.position] is not None):
+            item=self.menu_items[self.position]
+            print(f'next Item is {item.getName()}')
+            self.position+=1
+            return item
+        
+        else:
+            raise EndOfIteration("Reached End of Iterations")
+
         
 
