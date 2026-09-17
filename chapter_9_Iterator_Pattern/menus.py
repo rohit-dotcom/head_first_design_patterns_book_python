@@ -52,12 +52,8 @@ class PancakeHouseMenu():
         menu_item=menuItem(name,description,isVeg,price)
         self.menuItems.add(menu_item)
 
-    def getMenuItems(self):
-        return self.menuItems
-
     def createIterator(self):
-        items=self.getMenuItems()
-        return PancakeHouseIterator(items)
+        return PancakeHouseIterator(self.menuItems)
 
 class PancakeHouseIterator(Iterator):
     def __init__(self,pancake_menu_items):
@@ -100,12 +96,8 @@ class DinerMenu():
             self.menuItems[self.numberOfItems]=menu_item
             self.numberOfItems+=1
 
-    def getMenuItems(self):
-        return self.menuItems
-
     def createIterator(self):
-        items=self.getMenuItems()
-        return DinerIterator(items)
+        return DinerIterator(self.menuItems)
 
 class DinerIterator(Iterator):
     def __init__(self,diner_menu_items):

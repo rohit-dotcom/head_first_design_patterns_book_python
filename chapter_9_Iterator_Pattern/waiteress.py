@@ -13,13 +13,15 @@ class Waitress():
             print(item.getName())
             print(item.getDescription())
             print(item.getPrice())
-
-            print('-'*50)
+            print('-'*20)
 
     def printAllMenu(self):
-        print('Printing menu items:')
+        print('Printing lunch menu items:')
         self.printMenu(self.diner_menu.createIterator())
+        print('-'*50)
+        print('Printing breakfast  items:')
         self.printMenu(self.pancakeMenu.createIterator())
+        print('-'*50)
 
 
 
