@@ -15,7 +15,10 @@ class Iterator(ABC):
     def next()->bool:
         pass
 
-
+class Menu(ABC):
+    @abstractmethod
+    def createIterator(self):
+        pass
     
 class menuItem():
     def __init__(self,name:str,description:str,isVeg:bool,price:float):
@@ -36,7 +39,7 @@ class menuItem():
     def getPrice(self):
         return self.price
 
-class PancakeHouseMenu():
+class PancakeHouseMenu(Menu):
     def __init__(self,menuItems:set=set()):
         self.menuItems=menuItems
         self.addItem('K&B Pancake Breakfast','Pancakes with scrambled Eggs and toast',
@@ -73,7 +76,7 @@ class PancakeHouseIterator(Iterator):
         else:
             raise EndOfIteration("Reach End of Iterations")
 
-class DinerMenu():
+class DinerMenu(Menu):
     def __init__(self,menuItem:List=None):
         self.max_items=6
         self.menuItems=[None]*self.max_items
