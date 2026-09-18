@@ -77,7 +77,7 @@ class PancakeHouseIterator(Iterator):
             raise EndOfIteration("Reach End of Iterations")
 
 class DinerMenu(Menu):
-    def __init__(self,menuItem:List=None):
+    def __init__(self,):
         self.max_items=6
         self.menuItems=[None]*self.max_items
         self.numberOfItems=0
@@ -123,5 +123,50 @@ class DinerIterator(Iterator):
         else:
             raise EndOfIteration("Reached End of Iterations")
 
+class CafeMenu(Menu):
+    def __init__(self,):
+        self.menuItems={}
+
+        self.addItems( "Veggie Burger and Air Fries",
+                      "Veggie Burger on a Whole Wheat Bun,lettuce , tomato and fries",
+                      True,3.99)
+        self.addItems("Soup of the day","A cup of soup of the day, with a side salad",
+                      False,3.69)
+        self.addItems("Burrito","A large burrito, with whole pinto beans, salsa,guacamole",
+                      True,4.29)
+
+    def addItems(self,name:str,description:str,isVeg:bool,price:float):
+        self.menuItems[name]=menuItem(name,description,isVeg,price)
+    
+
+    def createIterator(self):
+        return CafeMenuIterator(self.menuItems)
+
+class CafeMenuIterator(Iterator):
+    def __init__(self,cafe_menu_items:dict):
+        self.menu_items=cafe_menu_items
+        self.all_keys=(i for i in cafe_menu_items.keys())
+        self.next_key=next(self.all_keys)
+
+    def hasNext(self):
+        if self.next_key:
+            return True
+        else:
+            return False
+
+    def next(self):
+        if self.hasNext():
+            item=self.menu_items[self.next_key]
+            try:
+                self.next_key=next(self.all_keys)
+                return item
+            except StopIteration:
+                self.next_key=None
+                return item
+        else:
+            raise EndOfIteration("Reached End of Iterations")
+        
+
+        
         
 
