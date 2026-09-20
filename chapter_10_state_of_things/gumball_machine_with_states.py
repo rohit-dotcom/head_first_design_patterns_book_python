@@ -30,13 +30,20 @@ class HasQuarter(State):
     def turnCrank(self):
         print("You will get a gumball")
         self.gumball_machine.setState(self.gumball_machine.getSoldstate())
+        self.dispense()
 
     def ejectQuarter(self):
         print("Ejecting Your quarter")
         self.gumball_machine.setState(self.gumball_machine.getNoQuarterstate())
 
     def dispense(self):
-        print("Turn crank first")
+        print("Rolling out a gumball")
+        self.gumball_machine.count-=1
+        if self.gumball_machine.count==0:
+            self.gumball_machine.setState(self.gumball_machine.getSoldOutstate())
+        else:
+            self.gumball_machine.setState(self.gumball_machine.getNoQuarterstate())
+        
 
 
 class Sold(State):
@@ -53,13 +60,8 @@ class Sold(State):
         print("You have already got a gumball")
 
     def dispense(self):
-        print("Rolling out a gumball")
-        self.gumball_machine.count-=1
-        if self.gumball_machine.count==0:
-            self.gumball_machine.setState(self.gumball_machine.getSoldOutstate())
-        else:
-            self.gumball_machine.setState(self.gumball_machine.getNoQuarterstate())
-
+        print("Already dispensed!")
+        
 class NoQuarter(State):
     def __init__(self,gumball_machine:Gumball_Machine):
         self.gumball_machine=gumball_machine

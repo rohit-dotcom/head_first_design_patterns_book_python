@@ -6,3 +6,6 @@ if __name__=='__main__':
     gumball_machine.insertQuarter()
     gumball_machine.turnCrank()
     gumball_machine.ejectQuarter()
+    gumball_machine.turnCrank()
+    gumball_machine.insertQuarter()
+    gumball_machine.turnCrank()
