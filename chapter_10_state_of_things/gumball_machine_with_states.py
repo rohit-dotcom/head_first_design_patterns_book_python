@@ -166,6 +166,10 @@ class Gumball_Machine():
     def setState(self,state:State):
         self.state=state
 
+    def refill(self,numberOfGumballs:int):
+        self.count=numberOfGumballs
+        self.setState(self.getNoQuarterstate())
+
     
 
 
