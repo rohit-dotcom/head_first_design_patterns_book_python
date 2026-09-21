@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import ABC,abstractmethod
+import random
 
 class State(ABC):
     
@@ -29,7 +30,12 @@ class HasQuarter(State):
 
     def turnCrank(self):
         print("You will get a gumball")
-        self.gumball_machine.setState(self.gumball_machine.getSoldstate())
+        winner=random.randint(0,10)
+        if winner==0 and self.gumball_machine.count>0:
+
+            self.gumball_machine.setState(self.gumball_machine.getWinnerstate())
+        else:
+            self.gumball_machine.setState(self.gumball_machine.getSoldstate())
 
     def ejectQuarter(self):
         print("Ejecting Your quarter")
@@ -93,6 +99,30 @@ class SoldOut(State):
     def dispense(self):
         print('You cant the machine is sold out')
 
+
+class Winner(State):
+    def __init__(self,gumball_machine:Gumball_Machine):
+        self.gumball_machine=gumball_machine
+
+    def insertQuarter(self):
+        print('You already getting a gumball why you are inserting another quarter')
+
+    def turnCrank(self):
+        print("You have already turned crank")
+
+    def ejectQuarter(self):
+        print("You have already got a gumball")
+
+    def dispense(self):
+        print("You are a winner!!, Rolling out 2 gumballs")
+        self.gumball_machine.count-=2
+        if self.gumball_machine.count==0:
+            self.gumball_machine.setState(self.gumball_machine.getSoldOutstate())
+        else:
+            self.gumball_machine.setState(self.gumball_machine.getNoQuarterstate())
+
+
+
 class Gumball_Machine():
 
     def __init__(self,count):
@@ -100,6 +130,7 @@ class Gumball_Machine():
         self.noQuarter=NoQuarter(self)
         self.sold=Sold(self)
         self.soldOut=SoldOut(self)
+        self.winner=Winner(self)
         self.count=count
         self.state=self.soldOut
 
@@ -116,6 +147,8 @@ class Gumball_Machine():
         return self.sold
     def getSoldOutstate(self):
         return self.soldOut
+    def getWinnerstate(self):
+            return self.winner
 
     def insertQuarter(self):
         self.state.insertQuarter()
@@ -132,6 +165,10 @@ class Gumball_Machine():
 
     def setState(self,state:State):
         self.state=state
+
+    def refill(self,numberOfGumballs:int):
+        self.count+=numberOfGumballs
+        self.setState(self.getNoQuarterstate())
 
     
 
