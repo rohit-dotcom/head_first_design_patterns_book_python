@@ -36,7 +36,49 @@ class QuackCounter(Quackable):
     def quack(self,):
         QuackCounter.count+=1
         return self.duck.quack()
-
+    @classmethod
     def getCount(self):
         return QuackCounter.count
-        
+
+class DuckFactory(ABC):
+    @abstractmethod
+    def createMallardDuck():
+        pass
+    @abstractmethod
+    def createRubberDuck():
+        pass
+    @abstractmethod
+    def createdDuckWistle():
+        pass
+    @abstractmethod
+    def createDuckAdapter():
+        pass
+
+class CounterDuckFactory(DuckFactory):
+
+    def createMallardDuck(self):
+        return QuackCounter(MallardDuck())
+
+    def createRubberDuck(self):
+        return QuackCounter(RubberDuck())
+
+    def createdDuckWistle(self):
+        return QuackCounter(DuckWistle())
+
+    def createDuckAdapter(self):
+        return QuackCounter(DuckAdapter(Goose()))
+    
+class NormalDuckFactory(DuckFactory):
+
+    def createMallardDuck(self):
+        return MallardDuck()
+
+    def createRubberDuck(self):
+        return RubberDuck()
+
+    def createdDuckWistle(self):
+        return DuckWistle()
+
+    def createDuckAdapter(self):
+        return DuckAdapter(Goose())
+    
