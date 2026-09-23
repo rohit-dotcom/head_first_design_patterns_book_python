@@ -17,4 +17,14 @@ class DuckWistle(Quackable):
     def quack(self):
         return "Kwaq"
 
+class Goose():
+    def honk(self):
+        return "Honk"
 
+class DuckAdapter(Quackable):
+    def __init__(self,goose:Goose):
+        self.goose=goose
+    def quack(self):
+        return self.goose.honk()
+
+        
