@@ -22,9 +22,21 @@ class Goose():
         return "Honk"
 
 class DuckAdapter(Quackable):
-    def __init__(self,goose:Goose):
+    def __init__(self,goose:Quackable):
         self.goose=goose
     def quack(self):
         return self.goose.honk()
 
+class QuackCounter(Quackable):
+    count=0
+    def __init__(self,duck:Quackable):
+        self.duck=duck
+        
+
+    def quack(self,):
+        QuackCounter.count+=1
+        return self.duck.quack()
+
+    def getCount(self):
+        return QuackCounter.count
         
