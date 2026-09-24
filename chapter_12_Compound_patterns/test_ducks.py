@@ -1,4 +1,11 @@
-from SimUDucks import Quackable, MallardDuck,RubberDuck,DuckWistle,Goose,DuckAdapter,QuackCounter
+from SimUDucks import Quackable, MallardDuck,RubberDuck,DuckWistle,Goose,DuckAdapter,QuackCounter,CounterDuckFactory,NormalDuckFactory
+import pytest
+
+@pytest.fixture(autouse=True)
+def reset_quack_count():
+    """Reset quack count before each test"""
+    QuackCounter.count=0
+    yield
 
 def test_quackable_ducks_can_quack():
     mallard_duck=MallardDuck()
@@ -29,5 +36,26 @@ def test_decorator_is_able_to_add_count_functionality_to_any_duck():
     quack_counter_2.quack()
 
     assert quack_counter_2.quack()=="Honk"
-    assert quack_counter_2.getCount()==4
-    assert quack_counter_1.getCount()==4
+    assert QuackCounter.getCount()==4
+
+
+def test_duck_factory_method_for_creating_different_families_of_ducks():
+    counter_duck_factory=CounterDuckFactory()
+    normal_duck_factory=NormalDuckFactory()
+
+    counter_mallard_duck=counter_duck_factory.createMallardDuck()
+    normal_mallard_duck=normal_duck_factory.createMallardDuck()
+    counter_goose_duck=counter_duck_factory.createDuckAdapter()
+
+    counter_mallard_duck.quack()
+    counter_mallard_duck.quack()
+    counter_mallard_duck.quack()
+    counter_goose_duck.quack()
+    
+    
+
+    assert normal_mallard_duck.quack()=='Quack'
+    assert counter_goose_duck.quack()=="Honk"
+    assert QuackCounter.getCount()==5
+    
+
