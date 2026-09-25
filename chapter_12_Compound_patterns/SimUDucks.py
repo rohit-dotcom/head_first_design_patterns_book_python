@@ -1,4 +1,5 @@
 from abc import ABC,abstractmethod
+from typing import List
 
 class Quackable(ABC):
     @abstractmethod
@@ -81,4 +82,19 @@ class NormalDuckFactory(DuckFactory):
 
     def createDuckAdapter(self):
         return DuckAdapter(Goose())
+
+class Flock(Quackable):
+    def __init__(self,ducks:List[Quackable]=[]):
+        self.ducks=ducks
+
+    def add(self,duck):
+        self.ducks.insert(-1,duck)
+
+    def remove(self,duck):
+        self.ducks.remove(duck)
+
+    def quack(self):
+        for duck in self.ducks:
+            duck.quack()
+
     
