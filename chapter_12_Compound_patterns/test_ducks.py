@@ -1,4 +1,6 @@
-from SimUDucks import Quackable, MallardDuck,RubberDuck,DuckWistle,Goose,DuckAdapter,QuackCounter,CounterDuckFactory,NormalDuckFactory
+from SimUDucks import (Quackable, MallardDuck,RubberDuck,DuckWistle,Goose,
+                       DuckAdapter,QuackCounter,CounterDuckFactory,NormalDuckFactory,
+                       Flock)
 import pytest
 
 @pytest.fixture(autouse=True)
@@ -47,6 +49,7 @@ def test_duck_factory_method_for_creating_different_families_of_ducks():
     normal_mallard_duck=normal_duck_factory.createMallardDuck()
     counter_goose_duck=counter_duck_factory.createDuckAdapter()
 
+
     counter_mallard_duck.quack()
     counter_mallard_duck.quack()
     counter_mallard_duck.quack()
@@ -57,5 +60,33 @@ def test_duck_factory_method_for_creating_different_families_of_ducks():
     assert normal_mallard_duck.quack()=='Quack'
     assert counter_goose_duck.quack()=="Honk"
     assert QuackCounter.getCount()==5
+    
+
+
+def test_flock_works_by_calling_all_birds_in_flock():
+    counter_duck_factory=CounterDuckFactory()
+    normal_duck_factory=NormalDuckFactory()
+
+    counter_mallard_duck=counter_duck_factory.createMallardDuck()
+    normal_mallard_duck=normal_duck_factory.createMallardDuck()
+    counter_goose_duck=counter_duck_factory.createDuckAdapter()
+    mallard_duck_1=counter_duck_factory.createMallardDuck()
+    mallard_duck_2=counter_duck_factory.createMallardDuck()
+    mallard_duck_3=counter_duck_factory.createMallardDuck()
+
+    flock=Flock([counter_mallard_duck,normal_mallard_duck,counter_goose_duck,])
+    flockOFMallards=Flock()
+    flockOFMallards.add(mallard_duck_1)
+    flockOFMallards.add(mallard_duck_2)
+    flockOFMallards.add(mallard_duck_3)
+    flock.add(flockOFMallards)
+
+    flock.quack()
+    
+    
+
+    assert normal_mallard_duck.quack()=='Quack'
+    assert counter_goose_duck.quack()=="Honk"
+    assert QuackCounter.getCount()==6
     
 
