@@ -1,6 +1,6 @@
 from SimUDucks import (Quackable, MallardDuck,RubberDuck,DuckWistle,Goose,
                        DuckAdapter,QuackCounter,CounterDuckFactory,NormalDuckFactory,
-                       Flock)
+                       Flock,Observer,Observable,QuackObservable)
 import pytest
 
 @pytest.fixture(autouse=True)
@@ -88,5 +88,20 @@ def test_flock_works_by_calling_all_birds_in_flock():
     assert normal_mallard_duck.quack()=='Quack'
     assert counter_goose_duck.quack()=="Honk"
     assert QuackCounter.getCount()==6
-    
 
+
+
+
+def test_quackologists_able_to_observe_duck_quack(capsys):
+
+    normal_duck_factory=NormalDuckFactory()
+    counter_duck_factory=CounterDuckFactory()
+    counterMallard_duck=normal_duck_factory.createMallardDuck()
+    
+    quackologist=Observer('Quackologist_jim')
+    counterMallard_duck.add_observer(quackologist)
+
+    print(counterMallard_duck.quack())
+
+    captured=capsys.readouterr()
+    assert captured.out=="Quackologist_jim observed a Quack \nQuack\n"
