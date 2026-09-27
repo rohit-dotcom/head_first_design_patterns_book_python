@@ -25,9 +25,11 @@ class Observer():
     def update(self,observable:Observable):
         print(f"{self.name} observed a Quack ")
 
+
 class QuackObservable(Quackable,Observable):
-    def __init__(self,observers:List[Observer]=[]):
-        self.observers=observers
+    def __init__(self,duck:Quackable):
+        self.observers:List[Observer]=[]
+        self.duck=duck
 
     def add_observer(self,observer:Observer):
         self.observers.insert(-1,observer)
@@ -37,15 +39,21 @@ class QuackObservable(Quackable,Observable):
 
     def notify(self):
         for observer in self.observers:
-            observer.update(observer)
+            observer.update(self.duck)
+    def quack(self):
+        pass
 
 class MallardDuck(QuackObservable):
+    quack_observable:QuackObservable
     def __init__(self):
-            super().__init__()
-
+        MallardDuck.quack_observable=QuackObservable(self)
+        
     def quack(self):
         self.notify()
         return f"Quack"
+
+    def notify(self):
+        MallardDuck.quack_observable.notify()
 
 class RubberDuck(QuackObservable):
     def __init__(self):
@@ -56,26 +64,34 @@ class RubberDuck(QuackObservable):
         return "Squeak"
 
 class DuckWistle(QuackObservable):
+    def __init__(self):
+            super().__init__()
+
     def quack(self):
+        self.notify()
         return "Kwaq"
 
-class Goose():
+class Goose():    
     def honk(self):
         return "Honk"
 
 class DuckAdapter(QuackObservable):
     def __init__(self,goose:Quackable):
         self.goose=goose
+        super().__init__()
     def quack(self):
+        self.notify()
         return self.goose.honk()
 
 class QuackCounter(QuackObservable):
     count=0
     def __init__(self,duck:Quackable):
+        super().__init__()
         self.duck=duck
         
 
     def quack(self,):
+        self.notify()
         QuackCounter.count+=1
         return self.duck.quack()
     @classmethod
