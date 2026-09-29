@@ -2,11 +2,6 @@ from __future__ import annotations
 from abc import ABC,abstractmethod
 from typing import List
 
-class Quackable(ABC):
-    @abstractmethod
-    def quack():
-        pass
-
 class Observable(ABC):
     @abstractmethod
     def add_observer():
@@ -15,7 +10,13 @@ class Observable(ABC):
     def remove_observer():
         pass
     @abstractmethod
-    def notify():
+    def notifyObservers():
+        pass
+
+
+class Quackable(Observable):
+    @abstractmethod
+    def quack():
         pass
 
 class Observer():
@@ -26,7 +27,7 @@ class Observer():
         print(f"{self.name} observed a Quack ")
 
 
-class QuackObservable(Quackable,Observable):
+class QuackObservable(Observable):
     def __init__(self,duck:Quackable):
         self.observers:List[Observer]=[]
         self.duck=duck
@@ -35,41 +36,59 @@ class QuackObservable(Quackable,Observable):
         self.observers.insert(-1,observer)
 
     def remove_observer(self,observer:Observer):
-          self.observers.remove(-1,observer)
+        self.observers.remove(-1,observer)
 
-    def notify(self):
+    def notifyObservers(self):
         for observer in self.observers:
             observer.update(self.duck)
-    def quack(self):
-        pass
 
-class MallardDuck(QuackObservable):
+class MallardDuck(Quackable):
     quack_observable:QuackObservable
     def __init__(self):
-        MallardDuck.quack_observable=QuackObservable(self)
+        self.quack_observable=QuackObservable(self)
         
     def quack(self):
-        self.notify()
+        self.notifyObservers()
         return f"Quack"
 
-    def notify(self):
-        MallardDuck.quack_observable.notify()
+    def add_observer(self,observer:Observer):
+        self.quack_observable.add_observer(observer)
+    def remove_observer(self,observer:Observer):
+        self.quack_observable.remove_observer(observer)
+
+    def notifyObservers(self):
+        self.quack_observable.notifyObservers()
 
 class RubberDuck(QuackObservable):
     def __init__(self):
-        super().__init__()
-    
+        self.quack_observable=QuackObservable(self)
+            
     def quack(self):
-        self.notify()
-        return "Squeak"
+        self.notifyObservers()
+        return f"Squeak"
 
+    def add_observer(self,observer:Observer):
+            self.quack_observable.add_observer(observer)
+    def remove_observer(self,observer:Observer):
+        self.quack_observable.remove_observer(observer)
+
+    def notifyObservers(self):
+        self.quack_observable.notifyObservers()
 class DuckWistle(QuackObservable):
     def __init__(self):
-            super().__init__()
-
+        self.quack_observable=QuackObservable(self)
+                
     def quack(self):
-        self.notify()
-        return "Kwaq"
+        self.notifyObservers()
+        return f"Kwaq"
+
+    def add_observer(self,observer:Observer):
+        self.quack_observable.add_observer(observer)
+    def remove_observer(self,observer:Observer):
+        self.quack_observable.remove_observer(observer)
+
+    def notifyObservers(self):
+        self.quack_observable.notifyObservers()
 
 class Goose():    
     def honk(self):
@@ -78,22 +97,35 @@ class Goose():
 class DuckAdapter(QuackObservable):
     def __init__(self,goose:Quackable):
         self.goose=goose
-        super().__init__()
+        self.quack_observable=QuackObservable(self)
+                
     def quack(self):
-        self.notify()
+        self.notifyObservers()
         return self.goose.honk()
+
+    def add_observer(self,observer:Observer):
+        self.quack_observable.add_observer(observer)
+    def remove_observer(self,observer:Observer):
+        self.quack_observable.remove_observer(observer)
+ 
+    def notifyObservers(self):
+        self.quack_observable.notifyObservers()
 
 class QuackCounter(QuackObservable):
     count=0
     def __init__(self,duck:Quackable):
-        super().__init__()
         self.duck=duck
+        self.quack_observable=QuackObservable(self)
         
 
     def quack(self,):
-        self.notify()
+        self.quack_observable.notifyObservers()
         QuackCounter.count+=1
         return self.duck.quack()
+    def add_observer(self,observer:Observer):
+        self.quack_observable.add_observer(observer)
+    def remove_observer(self,observer:Observer):
+        self.quack_observable.remove_observer(observer)
     @classmethod
     def getCount(self):
         return QuackCounter.count
