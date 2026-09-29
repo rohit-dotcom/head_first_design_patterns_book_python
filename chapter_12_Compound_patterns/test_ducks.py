@@ -97,9 +97,10 @@ def test_quackologists_able_to_observe_duck_quack(capsys):
     
     quackologist=Observer('Quackologist_jim')
     counterMallard_duck.add_observer(quackologist)
+    normalMallard_duck.add_observer(quackologist)
 
     print(counterMallard_duck.quack())
     print(normalMallard_duck.quack())
 
     captured=capsys.readouterr()
-    assert captured.out=="Quackologist_jim observed a Quack \nQuack\n"
+    assert captured.out=="Quackologist_jim observed a Quack \nQuack\nQuackologist_jim observed a Quack \nQuack\n"
